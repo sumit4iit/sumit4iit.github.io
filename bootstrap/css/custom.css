@@ -1,0 +1,51 @@
+@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300italic,400italic);
+
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700,300);
+body {
+margin-top: 20px;
+margin-bottom: 20px;
+background-color: #1f1f1f;
+}
+.container {
+max-width: 768px;
+background-color:#fff;
+padding:20px 50px;
+margin:15px auto;
+}
+
+.header {
+}
+
+.row {
+padding-bottom:5px;
+margin-bottom:5px;
+border-bottom: 1px solid #dddddd;
+}
+
+.prof_pic {
+border:1px solid #000000
+}
+
+h1 {
+font-size:40px;
+line-height:50px;
+font-weight:700;
+text-align:center;
+}
+
+h2 {
+text-align:center;
+}
+
+.social {
+padding-top:20px;
+list-style:none;
+font-size:13px;
+text-decoration:none;
+}
+
+.social-sites {
+margin-top: 4px;
+padding: 3px;
+}
+
