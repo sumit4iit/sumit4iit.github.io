@@ -48,4 +48,9 @@ text-decoration:none;
 margin-top: 4px;
 padding: 3px;
 }
-
+.details {
+border-left:1px solid #dddddd;
+}
+.details-extra {
+font-size:13px;
+}
