@@ -1,0 +1,12 @@
+---
+layout: post
+title: Recovery of a soft bricked XT1022 MOTO E
+date: '2016-04-09T04:17:00.000-07:00'
+author: Sumit Agrawal
+tags: 
+modified_time: '2016-04-09T04:17:04.937-07:00'
+blogger_id: tag:blogger.com,1999:blog-680750426739773469.post-6919365545013455177
+blogger_orig_url: http://codewithgeeks.blogspot.com/2016/04/recovery-of-soft-bricked-xt1022-moto-e.html
+---
+
+<div dir="ltr" style="text-align: left;" trbidi="on">My mom owns old Motorola E-2014 edition (condor). This was a great device at that time in the entry segment.<br /><div>The only problem with this device is that it comes with extremely limited internal memory. Merely 4 GB. This limit was causing a lot of trouble recently, especially&nbsp;after upgrading to lollipop update.</div><div><br /></div><div>Recently CM started providing nightly CM13 builds for condor. CM13 is based on Android Marshmallow. One of the great features of Marshmallow is that you can format external sd card to be treated as internal sd card, where apps can be installed. This is a&nbsp;cheaper way of getting extra memory for devices with limited internal storage.</div><div><br /></div><div>So, next task was to install CM-13 nightly build on condor (There are no RC/Snapshot/release builds available as of 20160409).<br /><br />Steps followed:<br /><ul style="text-align: left;"><li>Install Android Platform Tools.</li><ul><li>I primarily work on ubuntu, if windows is your preferred choice you need to install appropriate USB drivers from Motorola.</li><li>This would install fastboot and adb on your device.</li><li>Make sure that your device is detected by adb, by using adb devices command.</li></ul><li>Fastboot</li><ul><li>Start your phone by pressing power and 'volume down' key for few seconds.</li><li>If the hardware shorcut is not working, then you can also connect your phone to adb and run `adb reboot fastboot`</li><li>Once in fastboot mode, next step is to flash custom recovery</li><ul><li>Download TWRP or any other recovery that you prefer and run following command</li><ul><li><br /></li></ul></ul></ul></ul></div></div>
