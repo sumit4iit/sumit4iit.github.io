@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<!-- saved from url=(0353)https://sentry.amazon.com/SSO/redirect?redirect_uri=https%3A%2F%2Fpipelines.amazon.com%3A443%2Fpipelines%2FTCMSService&client_id=https%3A%2F%2Fpipelines.amazon.com%3A443&scope=openid&response_type=id_token&nonce=a3d09d39f7a40f1b992fbc63082d9922378bba782fdf5c93e3cab50f67b89515&acr_values=selective_mfa&sentry_handler_version=OpenIdConnectApacheMod-2.0-1 -->
+<html class="gr__sentry_amazon_com"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width initial-scale=1">
+
+
+    <link rel="stylesheet" type="text/css" href="./Sentry MFA Authentication_files/login.css">
+    <link rel="stylesheet" href="./Sentry MFA Authentication_files/jquery-ui.css">
+    <link type="text/css" rel="stylesheet" href="./Sentry MFA Authentication_files/application.min.css">
+
+    <script type="text/javascript" src="./Sentry MFA Authentication_files/jquery-2.1.4.min.js"></script><style>h5[data-alt-pixel-url^="/gp/sponsored-products/"] + div + .a-row,
+h5[data-alt-pixel-url^="/gp/sponsored-products/"],
+div[style="width:300px;height:280px;"],
+.s-sponsored-list-header + .a-popover-preload + .a-row + .a-row + .a-row,
+.s-sponsored-list-header + .a-popover-preload + .a-row + .a-row,
+.s-sponsored-list-header,
+.pa-sp-container,
+.a-link-normal[href*="&adId="],
+#sp_detail,
+#raw-search-desktop-advertising-tower-1,
+#nav-swmslot,
+#desktop-rhs-carousels_click_within_right,
+#ad,
+#DAadrp
+{display:none !important;}</style>
+    <script src="./Sentry MFA Authentication_files/jquery-ui.js"></script>
+    <script type="text/javascript" src="./Sentry MFA Authentication_files/medium.min.js"></script>
+
+    <script type="text/javascript" src="./Sentry MFA Authentication_files/u2f-api.js"></script>
+    <title>Sentry MFA Authentication</title>
+
+    <style>
+    .push {
+      display:block;
+      height: 200px;
+    }
+    </style>
+
+    <script type="text/javascript">
+
+    $(document).ready(
+        function() {
+            $('#lblClientID').text("Before proceeding to https://pipelines.amazon.com:443, you must authenticate with " + getSentryEndpoint() + ".");
+            if (!$('#txtUsername').val()) {
+              $('#txtUsername').prop('readonly', false);
+            }
+            initializeU2FAuthentication();
+            decideMidwayURL();
+            displayErrorMessage();
+            setupAutoFocusOnTabChange();
+        });
+
+    function getMidwayURL() {
+      if ("prod" == "prod") {
+        return "http://midway.amazon.com";
+      }
+      else {
+        return "http://midway-gamma.amazon.com";
+      }
+    }
+
+    function decideMidwayURL() {
+      if ("prod" == "prod") {
+        $("#midwayURL").attr("href", "http://midway.amazon.com")
+      }
+      else {
+        $("#midwayURL").attr("href", "http://midway-gamma.amazon.com")
+      }
+    }
+
+    function initializeU2FAuthentication() {
+      var isUserTwoFactored = true;
+      if (isUserTwoFactored) {
+        $('#gemalto-tab-li').remove();
+        $('#gemalto-tab').remove();
+        document.getElementById("yubikey-tab-li").className = "active";
+        document.getElementById("yubikey-tab").className = "tab-pane active";
+        $('#yubikeyPassword').focus();
+      } else {
+        $('#yubikey-tab-li').remove();
+        $('#yubikey-tab').remove();
+        $('#gemaltoPasscode').focus();
+      }
+      if (isUserTwoFactored && {"authenticateRequests":[{"challenge":"Nzc0YzQzMWQtYjQ4My00ZjlmLWFkODAtYzczNjlhMGMyMDZi","appId":"https://midway-static.amazon.com/app-id.json","keyHandle":"-6FBBNExMIFtb41J2fKL2Xg8-hqlsbx6NXSEMawsUanBQ3XzRB7_jJaGvqfZI1y4l6qxjxw9xcRfCjVzbJlTPw","version":"U2F_V2"},{"challenge":"Nzc0YzQzMWQtYjQ4My00ZjlmLWFkODAtYzczNjlhMGMyMDZi","appId":"https://midway-static.amazon.com/app-id.json","keyHandle":"qX66bcOyB-NKp4WozukYAxGCgrTciWVws5xbjcyhVwQi9BBoRDu8ThHHReoi4AxpYU8uzb70Xtd6gChPOgIZ5A","version":"U2F_V2"}]} !== false) {
+        $( "#yubikey_button" ).button().on( "click", function() {
+          $('#yubikeyModal').modalV3('show');
+          var authRequests = {"authenticateRequests":[{"challenge":"Nzc0YzQzMWQtYjQ4My00ZjlmLWFkODAtYzczNjlhMGMyMDZi","appId":"https://midway-static.amazon.com/app-id.json","keyHandle":"-6FBBNExMIFtb41J2fKL2Xg8-hqlsbx6NXSEMawsUanBQ3XzRB7_jJaGvqfZI1y4l6qxjxw9xcRfCjVzbJlTPw","version":"U2F_V2"},{"challenge":"Nzc0YzQzMWQtYjQ4My00ZjlmLWFkODAtYzczNjlhMGMyMDZi","appId":"https://midway-static.amazon.com/app-id.json","keyHandle":"qX66bcOyB-NKp4WozukYAxGCgrTciWVws5xbjcyhVwQi9BBoRDu8ThHHReoi4AxpYU8uzb70Xtd6gChPOgIZ5A","version":"U2F_V2"}]}.authenticateRequests;
+
+          // Note: appId and Challenge are the same for all requests
+          var appId = authRequests[0].appId;
+          var challenge = authRequests[0].challenge;
+
+          var registeredKeys = new Array();
+          for (var i = 0; i < authRequests.length; i++) {
+            registeredKeys.push({version: authRequests[i].version, keyHandle: authRequests[i].keyHandle});
+          }
+
+          var errorCodes = getYubiKeyErrorMessageMap();
+
+          $('#yubiotpCode').val('');
+          setTimeout(
+            function() {
+              $('#yubiotpCode').focus()
+            }, 600);
+
+          var yubikeyPassword = $('#yubikeyPassword').val();
+          var encodedPwd = btoa(unescape(encodeURIComponent(yubikeyPassword)));
+          $('#yubiotpPassword').val(encodedPwd);
+
+          u2f.sign(appId, challenge, registeredKeys,
+          function(data) {
+            if(data.errorCode) {
+              $.toast("U2F failed with error code: " + data.errorCode + " and message: " + errorCodes[data.errorCode], { duration: 5000, type: 'error'});
+              if (data.errorCode === 4) {
+                $('#yubikeyModal').modalV3('hide');
+                var message = 'This YubiKey is not registered to your account. <a href="' + getMidwayURL() + '">Click here</a> to register your YubiKey with Midway. Or if you have already registered, wait up to 3 hours from registration time and try again.'
+                $.toast(message, { duration: 10000, type: 'info' });
+              } else {
+                $.toast("Please try using YubiOTP with a long press of your YubiKey.", { duration: 1000000, type: 'info' });
+              }
+              return;
+            }
+            document.getElementById('tokenResponse').value = JSON.stringify(data);
+            var encodedPwd = btoa(unescape(encodeURIComponent(document.getElementById('yubikeyPassword').value)));
+            document.getElementById('encodedPassword').value = encodedPwd;
+
+            document.getElementById('yubikeyform').submit();
+          });
+
+          return false;
+        });
+      } else { // No Yubikey challenge
+        $( "#yubikey_button" ).button().on( "click", function() {
+            var message = 'No YubiKey challenge available for your user. <a href="' + getMidwayURL() + '">Click here</a> to register a YubiKey with Midway. Or if you have already registered, wait up to 3 hours from registration time and try again.'
+            $.toast(message, { duration: 10000, type: 'error' });
+            return false;
+        });
+      }
+    }
+
+    function getYubiKeyErrorMessageMap() {
+        var errorCodes = {}
+        errorCodes[1] = "OTHER_ERROR: Undefined client error";
+        errorCodes[2] = "BAD_REQUEST: Invalid AppID or Bad Api call";
+        errorCodes[3] = "CONFIGURATION_UNSUPPORTED: Client configuration is not supported.";
+        errorCodes[4] = "DEVICE_INELIGIBLE: The presented device is not eligible for this request.";
+        errorCodes[5] = "TIMEOUT: Timeout reached before request could be satisfied.";
+        return errorCodes;
+    }
+
+    function displayErrorMessage() {
+        var err_msg = "";
+        if (err_msg != null &&
+               err_msg.localeCompare('')) {
+            $.toast(err_msg, { duration: 10000, type: 'error'});
+        }
+    }
+
+    function getSentryEndpoint() {
+        try {
+            return window.location.host.split(":")[0];
+        } catch (err) {
+            return "";
+        }
+    }
+
+    function getParameterByName(name, url) {
+        if (!url)
+            url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex
+            .exec(url);
+        if (!results)
+            return null;
+        if (!results[2])
+            return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+
+    function setupAutoFocusOnTabChange() {
+      $('#yubikey-tab-button').click(function() {
+        setTimeout(function() {
+          $('#yubikeyPassword').focus();
+        }, 0);
+      });
+
+      $('#gemalto-tab-button').click(function() {
+        setTimeout(function() {
+          $('#gemaltoPasscode').focus();
+        }, 0);
+      });
+    }
+</script>
+
+</head>
+
+<body class="authBody" data-gr-c-s-loaded="true">
+<div class="container-fluid">
+
+  <div class="authDiv">
+  <p>
+  </p><h1>Sentry MFA Authentication</h1>
+  <small><p id="lblClientID" style="margin-top: 10px">Before proceeding to https://pipelines.amazon.com:443, you must authenticate with sentry.amazon.com.</p></small>
+  <p></p>
+
+  <ul class="nav nav-tabs" role="tablist">
+    
+    <li id="yubikey-tab-li" class="active"><a href="https://sentry.amazon.com/SSO/redirect?redirect_uri=https%3A%2F%2Fpipelines.amazon.com%3A443%2Fpipelines%2FTCMSService&amp;client_id=https%3A%2F%2Fpipelines.amazon.com%3A443&amp;scope=openid&amp;response_type=id_token&amp;nonce=a3d09d39f7a40f1b992fbc63082d9922378bba782fdf5c93e3cab50f67b89515&amp;acr_values=selective_mfa&amp;sentry_handler_version=OpenIdConnectApacheMod-2.0-1#yubikey-tab" role="tab" data-toggle="tab" id="yubikey-tab-button">YubiKey</a></li>
+  </ul>
+
+  <div class="tab-content">
+    
+    <div class="tab-pane active" id="yubikey-tab">
+      <p>
+      </p><h3>YubiKey Auth</h3>
+      <p></p>
+      <p>
+      To register your YubiKey device, please go to the <b><a id="midwayURL" href="http://midway.amazon.com/">Midway Registration portal</a></b>.
+      </p>
+      <p>
+      </p><form method="POST" id="yubikeyform" class="form-horizontal clearfix">
+        <div class="form-group">
+          <div class="col-sm-3"></div>
+          <label for="yubikeyUsername" class="col-sm-2 control-label">Username</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" id="yubikeyUsername" value="sumitsa@ANT.AMAZON.COM" disabled="">
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-3"></div>
+          <label for="yubikeyPassword" class="col-sm-2 control-label">Password</label>
+          <div class="col-sm-4">
+            <input type="password" class="form-control" id="yubikeyPassword" placeholder="Enter your ANT password here">
+          </div>
+          <div class="col-sm-3"></div>
+        </div>
+        <div class="form-group">
+          <button id="yubikey_button" class="btn btn-primary btn-large">Sign in with your Password</button>
+        </div>
+
+        <input type="hidden" name="tokenResponse" id="tokenResponse">
+        <input type="hidden" name="username" id="username" value="sumitsa@ANT.AMAZON.COM">
+        <input type="hidden" name="pwdToken" id="encodedPassword">
+      </form>
+      <p></p>
+    </div>
+  </div>
+</div>
+
+<!-- Yubikey Verify Modal -->
+<div class="modalV3 fade" id="yubikeyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modalV3-dialog">
+    <div class="modalV3-content">
+      <div class="modalV3-header">
+        <button type="button" class="close" data-dismiss="modalV3" aria-hidden="true">
+          <i class="fa fa-times-circle"></i></button>
+        <h3>YubiKey Verification</h3>
+      </div>
+      <div class="modalV3-body">
+        <div style="padding-bottom: 24px;padding-top: 24px;">
+          <p>1. Insert your YubiKey</p>
+          <p>2. Your YubiKey should be blinking...</p>
+          <p>3. Touch your YubiKey to continue</p>
+          <p>4. If your YubiKey is not blinking, press and hold for 3 seconds to activate OTP.</p>
+        </div>
+        <form method="POST" id="yubiotpform" class="form-horizontal clearfix" autocomplete="false">
+          <div class="form-group">
+            <input type="text" class="form-control" id="yubiotpUsername" name="username" value="sumitsa@ANT.AMAZON.COM" readonly="" style="display:none;">
+            <div class="col-sm-10" style="text-align:center;">
+              <input type="text" style="text-align:center;" class="form-control" id="yubiotpCode" name="txtYubiOTP" autocomplete="off">
+            </div>
+            <div class="col-sm-2">
+              <button class="form-control btn btn-info btn-small">Submit</button>
+            </div>
+          </div>
+          <div style="visibility:hidden;position:absolute;">
+            <input id="yubiotpPassword" name="pwdToken">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="push"></div>
+<div class="footer">
+  Having issues? <a href="https://tiny.amazon.com/3ategwra/SentryIssue">Click here to contact us.</a>
+</div>
+</div>
+
+
+</body></html>
